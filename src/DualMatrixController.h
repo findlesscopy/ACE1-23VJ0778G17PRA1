@@ -1,17 +1,17 @@
-#ifndef ControladorMatrices_h
-#define ControladorMatrices_h
+#ifndef DualMatrixController_h
+#define DualMatrixController_h
 
 #include "Arduino.h"
 #include <LedControl.h>
 
-#include "MatrizSinDriver.h"
+#include "NoDriverMatrix.h"
 
 class DualMatrixController {
 
     public:
         DualMatrixController(
-            LedControl *leftMatrix,
-            NoDriverMatrix *rightMatrix
+            NoDriverMatrix *leftMatrix,
+            LedControl *rightMatrix
         );
 
     void setMatrix(bool matrix[8][16]);
@@ -25,9 +25,8 @@ class DualMatrixController {
     void setRightMatrix(bool matrix[8][8]);
 
     private:
-        LedControl *leftMatrix;
-        NoDriverMatrix *rightMatrix;
-        
+        NoDriverMatrix *leftMatrix;
+        LedControl *rightMatrix;
 };
 
 #endif

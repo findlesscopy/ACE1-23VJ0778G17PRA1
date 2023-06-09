@@ -1,10 +1,11 @@
-#ifndef MatrizSinDriver_h
-#define MatrizSinDriver_h
+
+#ifndef NoDriverMatrix_h
+#define NoDriverMatrix_h
 
 #include "Arduino.h"
 
 class NoDriverMatrix {
- 
+
   public:
     NoDriverMatrix(int rp[8], int cp[8]);
     
@@ -19,6 +20,5 @@ class NoDriverMatrix {
     int rowPins[8];
     int columnPins[8];
 };
-
 
 #endif

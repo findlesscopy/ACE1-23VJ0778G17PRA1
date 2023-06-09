@@ -1,4 +1,4 @@
-#include "MatrizSinDriver.h"
+#include "NoDriverMatrix.h"
 
 NoDriverMatrix::NoDriverMatrix(int rp[8], int cp[8]) {
     for(int pin = 0; pin < 8; pin++){

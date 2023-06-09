@@ -1,34 +1,33 @@
-#ifndef Controlador_h
-#define Controlador_h
+#ifndef Controllers_H
+#define Controllers_H
 
 #include "Arduino.h"
-#include "ControladorMatrices.h"
-#include "Plantillas.h"
+#include "DualMatrixController.h"
 
-// Pines de los Botones
+// Botons PINS
 extern const int BTN_IZQ;
-extern const int BTN_INIT;
+extern const int BTN_D;
 extern const int BTN_DER;
 extern const int BTN_K;
 
-// Pines de los potenciometros
-extern const int POT_JUEGO;
+// Potenciometer PIN
 extern const int POT_LETRAS;
+extern const int POT_JUEGO;
 
-// Estados previos de botones
+// Button previous states
 extern int last_btn_left_state;
 extern int last_btn_init_state;
 extern int last_btn_right_state;
 
-// Matriz
+// MATRIX
 extern bool controller_init_matrix;
 
 
-// Variables para modo de configuración
+// Some variables to manage the configurate mode 
 extern unsigned long btn_init_start_time;
 extern bool btn_init_pressed;
 
-// Uso de millis para tiempos, intervalos y modos
+// Use millis to capture the time, intervals and modes
 extern unsigned long timeMillis;
 extern unsigned long previousMillis;
 extern const long interval;
@@ -36,8 +35,8 @@ extern const long interval_2;
 extern int buttons_mode;
 
 void initial_mode();
-void game_mode(DualMatrixController *screen);
-void configuration_mode(DualMatrixController *screen, int vidas);
+void game_mode(/*DualMatrixController *screen*/);
+void configuration_mode(/*DualMatrixController *screen*/);
 void initiate_buttons();
 
 #endif
