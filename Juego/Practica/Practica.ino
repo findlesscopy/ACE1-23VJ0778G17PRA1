@@ -13,6 +13,8 @@ bool CAMBIAR_DIRECCION = false;   // Auxiliar para cambiar la orientación
 int nivel = 1;
 int torresDestruidas = 0; //pts de las torres destruidas
 bool inicio = false; // inidicar el inicio del juego
+int velocidadJuego = 0; //controla la velocidad de todo
+int cantidadVidad = 3; //controla la cantidad de vidas inicial hay 3
 
 void setup() {
   Serial.begin(9600);  // Inicializar la comunicación serial a 9600 bps
@@ -106,8 +108,11 @@ long int t0 = 0;
 long int t1 = 0;
 long int t2 = 0;
 void loop() {
+
+  //configuracion();
+
   t1 = millis();
-  if ((t1 - t0) >= 150) {
+  if ((t1 - t0) >=  map(velocidadJuego, 1, 16, 100, 10)) {
     t0 = millis();
     if (CAMBIAR_DIRECCION) {
       xAvion--;
@@ -155,6 +160,7 @@ void loop() {
   } else if (digitalRead(btn_Disp) == HIGH){
     generarProyectil();
   }
+  
 }
 
 void generarObjetivos() {
@@ -274,7 +280,6 @@ void verificarNivel() {
 }
 
 
-
 void impactoAvionTorre() {
   // Verificar colisión entre el avión y las torres
   for (int i = 0; i < 8; i++) {
@@ -297,4 +302,62 @@ void impactoAvionTorre() {
   }
 }
 
+void configuracion() {
+  // Mostrar barras horizontales de velocidad y vidas iniciales
+  int velocidad = 16; // Valor inicial de la velocidad
+  int vidas = 10; // Valor inicial de las vidas
+
+  // Mostrar barra de velocidad
+  for (int i = 0; i < velocidad; i++) {
+    buffer[0][i] = 1;
+  }
+
+  // Mostrar barra de vidas iniciales
+  for (int i = 0; i < vidas; i++) {
+    buffer[7][i] = 1;
+  }
+
+  // Mostrar el buffer en la matriz
+  mostrarMatriz();
+
+  // Leer los valores de los potenciómetros para cambiar la longitud de las barras
+  while (true) {
+    // Leer valor del potenciómetro de velocidad (rango de 0 a 1023)
+    int valorVelocidad = analogRead(A0);
+    // Mapear el valor a un rango de 0 a 16 (longitud de la barra de velocidad)
+    int longitudVelocidad = map(valorVelocidad, 0, 1023, 0, 16);
+    velocidadJuego = longitudVelocidad;
+
+    // Leer valor del potenciómetro de vidas (rango de 0 a 1023)
+    int valorVidas = analogRead(A1);
+    // Mapear el valor a un rango de 0 a 10 (longitud de la barra de vidas)
+    int longitudVidas = map(valorVidas, 0, 1023, 3, 10);
+    cantidadVidad = valorVidas;
+
+    /*/ Imprimir la longitud de la velocidad en el monitor serie
+    Serial.print("Longitud de la velocidad: ");
+    Serial.println(longitudVelocidad);*/
+
+    // Actualizar la longitud de la barra de velocidad en el buffer
+    for (int i = 0; i < 16; i++) {
+      if (i < longitudVelocidad) {
+        buffer[0][i] = 1;
+      } else {
+        buffer[0][i] = 0;
+      }
+    }
+
+    // Actualizar la longitud de la barra de vidas en el buffer
+    for (int i = 0; i < 10; i++) {
+      if (i < longitudVidas) {
+        buffer[7][i] = 1;
+      } else {
+        buffer[7][i] = 0;
+      }
+    }
+
+    // Mostrar el buffer en la matriz
+    mostrarMatriz();
+  }
+}
 
