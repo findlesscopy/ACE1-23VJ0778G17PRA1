@@ -135,7 +135,6 @@ void loop() {
      }
   }
 
-  impactoAvionTorre();
   pintarAvion();
   mostrarMatriz();
   borrarAvion();
@@ -144,7 +143,7 @@ void loop() {
     generarObjetivos();
   }
 
-
+  
 
   if (digitalRead(btn_izq) == HIGH ) {
     // Acciones del botón
@@ -155,6 +154,7 @@ void loop() {
   } else if (digitalRead(btn_Disp) == HIGH){
     generarProyectil();
   }
+  
 }
 
 void generarObjetivos() {
@@ -203,9 +203,6 @@ void generarProyectil() {
         xAvion = 0;
       }
     }
-
-    impactoAvionTorre();
-
     // Pintar Avion
     pintarAvion();
     // Mostrar el buffer en la matriz
@@ -270,30 +267,6 @@ void verificarNivel() {
     xAvion = 0;
     yAvion = 0;
     generarObjetivos();
-  }
-}
-
-
-
-void impactoAvionTorre() {
-  // Verificar colisión entre el avión y las torres
-  for (int i = 0; i < 8; i++) {
-    for (int j = 0; j < 16; j++) {
-      if (buffer[i][j] == 1) {
-        // Verificar si hay colisión
-        if (j >= xAvion && j <= xAvion + 2 && i >= yAvion && i <= yAvion + 1) {
-          // Colisión detectada, desplazar el avión dos posiciones hacia arriba
-          yAvion -= 2;
-          if (yAvion < 0) {
-            yAvion = 0;
-          }
-          // Actualizar la posición del avión en el buffer
-          pintarAvion();
-          // Mostrar el buffer en la matriz
-          mostrarMatriz();
-        }
-      }
-    }
   }
 }
 
