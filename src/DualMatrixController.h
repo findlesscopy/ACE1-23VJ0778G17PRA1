@@ -10,8 +10,10 @@ class DualMatrixController {
 
     public:
         DualMatrixController(
-            NoDriverMatrix *leftMatrix,
-            LedControl *rightMatrix
+            LedControl *leftMatrix,
+            NoDriverMatrix *rightMatrix
+            //NoDriverMatrix *leftMatrix,
+            //LedControl *rightMatrix
         );
 
     void setMatrix(bool matrix[8][16]);
@@ -25,8 +27,9 @@ class DualMatrixController {
     void setRightMatrix(bool matrix[8][8]);
 
     private:
-        NoDriverMatrix *leftMatrix;
-        LedControl *rightMatrix;
+        LedControl *leftMatrix;
+        NoDriverMatrix *rightMatrix;
+        
 };
 
 #endif

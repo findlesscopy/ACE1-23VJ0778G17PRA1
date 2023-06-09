@@ -30,8 +30,8 @@ int buttons_mode = 0; // 0 is the first mode to control the text loop, 1 to cont
 
 // Separeted functions
 void movimiento_0(){
-    if(digitalRead(BTN_D)){
-        //controller_init_matrix = controller_init_matrix ? false : true;
+    if(digitalRead(BTN_D) == LOW && last_btn_init_state == HIGH){
+        controller_init_matrix = controller_init_matrix ? false : true;
         Serial.println("Change the move of the loop text from left to right");
     }
 }
@@ -56,7 +56,7 @@ void change_init_0(){
 void initial_mode() {
   
   change_init_0();
-  //movimiento_0();
+  movimiento_0();
   
   last_btn_left_state = digitalRead(BTN_IZQ); 
   last_btn_init_state = digitalRead(BTN_D); 

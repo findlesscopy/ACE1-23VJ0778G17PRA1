@@ -23,7 +23,7 @@ NoDriverMatrix leftMatrix(leftMatrixRowPins, leftMatrixColumnPins);
 
 LedControl rightMatrix(11, 13, 10, 1);
 
-DualMatrixController screen(&leftMatrix, &rightMatrix);
+DualMatrixController screen(&rightMatrix, &leftMatrix);
 
 unsigned long actualTime = millis();
 
