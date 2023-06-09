@@ -11,7 +11,8 @@ LedControl matriz = LedControl(DIN, CLK, LOAD, 1);
 int btn_izq = 40, btn_der = 41, btn_Disp = 42;  // Botones del sistema
 bool CAMBIAR_DIRECCION = false;   // Auxiliar para cambiar la orientación
 int nivel = 1;
-int torresDestruidas = 0;
+int torresDestruidas = 0; //pts de las torres destruidas
+bool inicio = false; // inidicar el inicio del juego
 
 void setup() {
   Serial.begin(9600);  // Inicializar la comunicación serial a 9600 bps
@@ -137,10 +138,11 @@ void loop() {
   pintarAvion();
   mostrarMatriz();
   borrarAvion();
-  if (nivel == 1 ){
+  if (!inicio ){
+    inicio = true;
     generarObjetivos();
   }
-  nivel = 2;
+
   
 
   if (digitalRead(btn_izq) == HIGH ) {
@@ -233,9 +235,39 @@ void generarProyectil() {
   // Imprimir el número de torres destruidas
   Serial.print("Torres destruidas: ");
   Serial.println(torresDestruidas);
-  
+  // Verificar el nivel
+  verificarNivel();
 }
 
 
+void verificarNivel() {
+  int torresRestantes = 0;
+  int maxAltura = 0;
+
+  // Contar el número de torres restantes en el buffer y obtener la altura máxima
+  for (int i = 0; i < 8; i++) {
+    for (int j = 0; j < 16; j++) {
+      if (buffer[i][j] == 1) {
+        torresRestantes++;
+        int altura = 0;
+        while (buffer[i + altura][j] == 1) {
+          altura++;
+        }
+        if (altura > maxAltura) {
+          maxAltura = altura;
+        }
+      }
+    }
+  }
+
+  // Si no quedan torres o la altura máxima supera un cierto valor, subir de nivel
+  if (torresRestantes == 0 || maxAltura >= 5) {
+    nivel++;
+    //Resetear avion a inicio de posicion
+    xAvion = 0;
+    yAvion = 0;
+    generarObjetivos();
+  }
+}
 
 
