@@ -8,7 +8,7 @@
 #define LOAD 5
 
 LedControl matriz = LedControl(DIN, CLK, LOAD, 1);
-int btn_izq = 40, btn_der = 41, btn_Disp = 42;  // Botones del sistema
+int btn_izq = 40, btn_der = 41, btn_Disp = 42, btn_k = 43;  // Botones del sistema
 bool CAMBIAR_DIRECCION = false;   // Auxiliar para cambiar la orientación
 int nivel = 1;
 int torresDestruidas = 0; //pts de las torres destruidas
@@ -35,6 +35,10 @@ void setup() {
   pinMode(btn_izq, INPUT);
   //boton derecha
   pinMode(btn_der, INPUT);
+
+
+  
+  
 
 }
 
@@ -111,7 +115,8 @@ long int pruebaa = 0;
 bool Nivelencurso = false;
 void loop() {
 
-  //mostrarNivel();
+// mostrarVidasRestantes();
+//   mostrarMatriz();
  if ((Nivelencurso == false && nivel == 1) || (Nivelencurso== false)){
   mostrarNivel();
   mostrarMatriz();
@@ -160,55 +165,8 @@ void loop() {
   pintarAvion();
   mostrarMatriz();
   borrarAvion();
-  // if (!inicio ){
 
-  //   //inicio = true;
-  //   generarObjetivos();
-  // }
  }
-
-
-  //configuracion();
-
-  // t1 = millis();
-  // if ((t1 - t0) >=  map(velocidadJuego, 1, 16, 100, 10)) {
-  //   t0 = millis();
-  //   if (CAMBIAR_DIRECCION) {
-  //     xAvion--;
-  //     if (xAvion < 0) {
-  //       xAvion = 13;
-  //     }
-      
-  //   } else {
-  //     xAvion++;
-  //     if (xAvion > 13) {
-  //       xAvion = 0;
-       
-  //     }
-      
-  //   }
-  // }
-
-  // // Verifica si ha transcurrido 1 segundo
-  // if ((millis() - t2) >= 1000) {
-  //   t2 = millis(); // Reinicia el contador de tiempo
-  //    if(yAvion < 7){
-  //       yAvion++;
-  //    }else{
-  //      yAvion = 0; //pd: muerto
-  //    }
-  // }
-
-  // impactoAvionTorre();
-  // pintarAvion();
-  // mostrarMatriz();
-  // borrarAvion();
-  // if (!inicio ){
-  //   inicio = true;
-  //   generarObjetivos();
-  // }
-
-
 
   if (digitalRead(btn_izq) == HIGH ) {
     // Acciones del botón
@@ -218,7 +176,10 @@ void loop() {
     CAMBIAR_DIRECCION = false;
   } else if (digitalRead(btn_Disp) == HIGH){
     generarProyectil();
+  } else if (digitalRead(btn_k) == HIGH){
+    menuPause();
   }
+
   
 }
 
@@ -415,6 +376,16 @@ void impactoAvionTorre() {
     }
   }
 }
+
+void pausarjuego(){
+  Serial.println("Esta en pause");
+}
+
+void menuPause(){
+  pausarjuego();
+}
+
+
 
 //Aqui es donde se hace el mostrar nivel
 void mostrarNivel(){
@@ -755,6 +726,292 @@ void mostrarNivel(){
       buffer[3][6+2] = 1;
       buffer[3][7+2] = 1;
       buffer[3][8+2] = 1;
+
+    break;
+    default:
+      Serial.println("Ya no hay más niveles");
+
+    }
+}
+
+
+
+//Aqui es donde se hace el mostrar nivel
+void mostrarVidasRestantes(){
+
+    buffer[1][1] = 1;
+      buffer[1][2] = 1;
+      buffer[2][3] = 1;
+      buffer[2][4] = 1;
+      buffer[1][5] = 1;
+      buffer[1][6] = 1;
+      buffer[2][0] = 1;
+      buffer[3][0] = 1;
+      buffer[4][1] = 1;
+      buffer[5][2] = 1;
+      buffer[6][3] = 1;
+      buffer[6][4] = 1;
+      buffer[5][5] = 1;
+      buffer[4][6] = 1;
+      buffer[3][7] = 1;
+      buffer[2][7] = 1;
+      
+      //Relleno
+      buffer[2][1] = 1;
+      buffer[3][1] = 1;
+      buffer[2][2] = 1;
+      buffer[3][2] = 1;
+      buffer[4][2] = 1;
+      buffer[3][3] = 1;
+      buffer[4][3] = 1;
+      buffer[5][3] = 1;
+      buffer[3][4] = 1;
+      buffer[4][4] = 1;
+      buffer[5][4] = 1;
+      buffer[2][5] = 1;
+      buffer[3][5] = 1;
+      buffer[4][5] = 1;
+      buffer[2][6] = 1;
+      buffer[3][6] = 1;
+
+    switch(cantidadVidad){
+      case 1: 
+      buffer[2][7+4] = 1;
+      buffer[5][7+4] = 1;
+      buffer[1][8+4] = 1;
+      buffer[2][8+4] = 1;
+      buffer[3][8+4] = 1;
+      buffer[4][8+4] = 1;
+      buffer[5][8+4] = 1;
+      buffer[5][9+4] = 1;
+
+      break;
+    case 2:
+      buffer[1][6+4] = 1;
+      buffer[1][7+4] = 1;
+      buffer[1][8+4] = 1;
+      buffer[1][9+4] = 1;
+      buffer[2][9+4] = 1;
+      buffer[3][9+4] = 1;
+      buffer[3][6+4] = 1;
+      buffer[3][7+4] = 1;
+      buffer[3][8+4] = 1;
+      buffer[5][6+4] = 1;
+      buffer[5][7+4] = 1;
+      buffer[5][8+4] = 1;
+      buffer[5][9+4] = 1;
+      buffer[4][6+4] = 1;
+      break;
+    case 3:
+      buffer[1][6+4] = 1;
+      buffer[1][7+4] = 1;
+      buffer[1][8+4] = 1;
+      buffer[1][9+4] = 1;
+      buffer[2][9+4] = 1;
+      buffer[3][9+4] = 1;
+      buffer[3][6+4] = 1;
+      buffer[3][7+4] = 1;
+      buffer[3][8+4] = 1;
+      buffer[5][6+4] = 1;
+      buffer[5][9+4] = 1;
+      buffer[5][7+4] = 1;
+      buffer[5][8+4] = 1;
+      buffer[5][9+4] = 1;
+      buffer[4][9+4] = 1;
+      break;
+    case 4:
+    // Es ->> | el que cierra
+      buffer[1][9+4] = 1;
+      buffer[2][9+4] = 1;
+      buffer[3][9+4] = 1;
+      buffer[5][9+4] = 1;
+      buffer[4][9+4] = 1;
+
+      // Es ->> | el que abre
+       buffer[1][6+4] = 1;
+      buffer[2][6+4] = 1;
+      buffer[3][6+4] = 1;
+
+      // Es ->> ---- de enmedio
+      buffer[3][6+4] = 1;
+      buffer[3][7+4] = 1;
+      buffer[3][8+4] = 1;
+
+    break;
+    case 5:
+    // Es ->> ----- de Arriba
+      buffer[1][6+4] = 1;
+      buffer[1][7+4] = 1;
+      buffer[1][8+4] = 1;
+      buffer[1][9+4] = 1;
+
+      // Es ->> | el que cierra
+
+      buffer[3][9+4] = 1;
+      buffer[5][9+4] = 1;
+      buffer[4][9+4] = 1;
+
+      // Es ->> | el que abre
+
+      buffer[2][6+4] = 1;
+      buffer[3][6+4] = 1;
+
+      // Es ->> ---- de enmedio
+      buffer[3][6+4] = 1;
+      buffer[3][7+4] = 1;
+      buffer[3][8+4] = 1;
+
+      // Es ->> ---- de abajo
+      buffer[5][6+4] = 1;
+      buffer[5][7+4] = 1;
+      buffer[5][8+4] = 1;
+
+    break;
+    case 6:
+    // Es ->> ----- de Arriba
+      buffer[1][6+4] = 1;
+      buffer[1][7+4] = 1;
+      buffer[1][8+4] = 1;
+      buffer[1][9+4] = 1;
+
+      // Es ->> | el que cierra
+
+      buffer[3][9+4] = 1;
+      buffer[5][9+4] = 1;
+      buffer[4][9+4] = 1;
+
+      // Es ->> | el que abre
+
+      buffer[2][6+4] = 1;
+      buffer[3][6+4] = 1;
+      buffer[4][6+4] = 1;
+      buffer[5][6+4] = 1;
+
+      // Es ->> ---- de enmedio
+      buffer[3][6+4] = 1;
+      buffer[3][7+4] = 1;
+      buffer[3][8+4] = 1;
+
+      // Es ->> ---- de abajo
+      buffer[5][6+4] = 1;
+      buffer[5][7+4] = 1;
+      buffer[5][8+4] = 1;
+
+    break;
+    case 7:
+    // Es ->> ----- de Arriba
+      buffer[1][6+4] = 1;
+      buffer[1][7+4] = 1;
+      buffer[1][8+4] = 1;
+      buffer[1][9+4] = 1;
+
+      // Es ->> | el que cierra
+
+      buffer[2][9+4] = 1;
+      buffer[3][9+4] = 1;
+      buffer[4][9+4] = 1;
+      buffer[5][9+4] = 1;
+
+    break;
+    case 8:
+    // Es ->> ----- de Arriba
+      buffer[1][6+4] = 1;
+      buffer[1][7+4] = 1;
+      buffer[1][8+4] = 1;
+      buffer[1][9+4] = 1;
+
+      // Es ->> | el que cierra
+
+      buffer[2][9+4] = 1;
+      buffer[3][9+4] = 1;
+      buffer[5][9+4] = 1;
+      buffer[4][9+4] = 1;
+
+      // Es ->> | el que abre
+
+      buffer[2][6+4] = 1;
+      buffer[3][6+4] = 1;
+      buffer[5][6+4] = 1;
+      buffer[4][6+4] = 1;
+
+      // Es ->> ---- de enmedio
+      buffer[3][6+4] = 1;
+      buffer[3][7+4] = 1;
+      buffer[3][8+4] = 1;
+
+      // Es ->> ---- de abajo
+      buffer[5][6+4] = 1;
+      buffer[5][7+4] = 1;
+      buffer[5][8+4] = 1;
+
+    break;
+    case 9:
+    // Es ->> ----- de Arriba
+      buffer[1][6+4] = 1;
+      buffer[1][7+4] = 1;
+      buffer[1][8+4] = 1;
+      buffer[1][9+4] = 1;
+
+      // Es ->> | el que cierra
+
+      buffer[2][9+4] = 1;
+      buffer[3][9+4] = 1;
+      buffer[5][9+4] = 1;
+      buffer[4][9+4] = 1;
+
+      // Es ->> | el que abre
+
+      buffer[2][6+4] = 1;
+      buffer[3][6+4] = 1;
+      buffer[5][6+4] = 1;
+
+      // Es ->> ---- de enmedio
+      buffer[3][6+4] = 1;
+      buffer[3][7+4] = 1;
+      buffer[3][8+4] = 1;
+
+      // Es ->> ---- de abajo
+
+      buffer[5][7+4] = 1;
+      buffer[5][8+4] = 1;
+
+    break;
+    case 10:
+      
+
+      buffer[1][9] = 1;
+      buffer[2][9] = 1;
+      buffer[3][9] = 1;
+      buffer[4][9] = 1;
+      buffer[5][9] = 1;
+      
+      // Es ->> ----- de Arriba
+      buffer[1][11] = 1;
+      buffer[1][12] = 1;
+      buffer[1][13] = 1;
+      buffer[1][14] = 1;
+
+      // Es ->> | el que cierra
+
+      buffer[1][9+2] = 1;
+      buffer[2][9+2] = 1;
+      buffer[3][9+2] = 1;
+      buffer[4][9+2] = 1;
+      buffer[5][9+2] = 1;
+
+      // Es ->> | el que abre
+
+      buffer[1][14] = 1;
+      buffer[2][14] = 1;
+      buffer[3][14] = 1;
+      buffer[4][14] = 1;
+      buffer[5][14] = 1;
+
+      // Es ->> ---- de abajo
+      buffer[5][11] = 1;
+      buffer[5][12] = 1;
+      buffer[5][13] = 1;
+      buffer[5][14] = 1;
 
     break;
     default:
