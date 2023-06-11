@@ -130,6 +130,7 @@ bool Nivelencurso = false;
 bool isPaused = false;
 bool presionado_actualmente = false;
 bool inicioPartida = false;
+bool verEstadisticas = false;
 void loop() {
 
 // mostrarVidasRestantes();
@@ -1140,7 +1141,6 @@ for (int i = 0; i < 8; i++) {
 }
 
 void reiniciarJuego(){
-
 nivel = 1;
 torresDestruidas = 0; //pts de las torres destruidas
 inicio = false; // inidicar el inicio del juego
@@ -1238,34 +1238,56 @@ void pintarMenuPrincipal(){
         ocultarNivel();
       // Acciones del botón
   } else if (digitalRead(btn_Disp) == HIGH ) {
-    mostrarEstadisticas();
-       //Serial.println("Últimos 5 datos:");
-  //   for (int i = 0; i < numPuntajes; i++) {
-  //   int indice = (contadorPuntajes + i) % numPuntajes;
-  //   Serial.print("Puntaje ");
-  //   Serial.print(i);
-  //   Serial.print(": ");
-  //   Serial.println(datos[indice]);
-  // }
-
-  
+    verEstadisticas = true;
   } 
+  if (verEstadisticas == true){
+      ocultarNivel();
+      mostrarEstadisticas();
+      mostrarMatriz();
 
+      if (digitalRead(btn_k) == HIGH){
+
+    delay(50);
   
-}
+    if (digitalRead(btn_k) == HIGH) {
+
+        tiempo1 = millis();
+    if (digitalRead(btn_k)) {
+        if (!presionado_actualmente) {
+            presionado_actualmente = true;
+            tiempo0 = millis();
+        } else {
+            // Controlamos el tiempo
+            long int diferencia = tiempo1 - tiempo0;
+            if (diferencia >= 2800 && diferencia <= 3300) {
+                Serial.print("TRES");
+                delay(500);
+                if (!digitalRead(btn_k)) {
+                    // Código para 3 segundos
+                    isPaused = !isPaused;
+                    Serial.println("TRES SEGUNDOS");
+                    delay(50);
+                    ocultarNivel();
+                    verEstadisticas = false;
+                }
+            }
+        }
+    } else {
+        presionado_actualmente = false;
+    }
+        }
+  }
+  }
+    }
 
 
 void sinVidas(){
   // Almacena el ultimo puntaje
-    // Obtener el dato actual
     int puntajeActual = torresDestruidas;  // Debes proporcionar tu propia lógica para obtener el dato
 
-  // Almacenar el dato en el arreglo
   datos[contadorPuntajes] = puntajeActual;
   
-  // Incrementar el contador
   contadorPuntajes = (contadorPuntajes + 1) % numPuntajes;
-    // puntaje = torresdestruidas;
     Serial.println("Ya no tiene vidas");
     inicioPartida = false;
     reiniciarJuego();
@@ -1281,23 +1303,123 @@ void mostrarEstadisticas(){
   }
 
   // Calcular y mostrar el porcentaje de cada valor
-  Serial.println("Porcentaje de cada valor:");
+  //Serial.println("Porcentaje de cada valor:");
   for (int i = 0; i < numPuntajes; i++) {
     int porcentaje = (datos[i] * 100) / sumaTotal;
-    Serial.print("Dato ");
-    Serial.print(i);
-    Serial.print(": ");
-    Serial.print(datos[i]);
-    Serial.print(" (");
-    Serial.print(porcentaje);
-    Serial.println("%)");
+
+    if (i == 0 && porcentaje > 0){
+
+      pintarBarra(porcentaje, 1);
+    } else if (i == 1 && porcentaje > 0){
+
+      pintarBarra(porcentaje, 4);
+    } else if (i == 2 && porcentaje > 0){
+
+      pintarBarra(porcentaje, 7);
+    } else if (i == 3 && porcentaje > 0){
+
+      pintarBarra(porcentaje, 10);
+    } else if (i == 4 && porcentaje > 0){
+
+      pintarBarra(porcentaje, 13);
+    }
+    // Serial.print("Dato ");
+    // Serial.print(i);
+    // Serial.print(": ");
+    // Serial.print(datos[i]);
+    // Serial.print(" (");
+    // Serial.print(porcentaje);
+    // Serial.println("%)");
   }
 
-  // Mostrar la suma total
-  Serial.print("Suma total: ");
-  Serial.println(sumaTotal);
+  // // Mostrar la suma total
+  // Serial.print("Suma total: ");
+  // Serial.println(sumaTotal);
+}
 
+void pintarBarra(int porcentaje, int posiX){
 
+  if (porcentaje > 0 && porcentaje <= 13){
+    buffer[7][posiX] = 1;
+    buffer[7][posiX+1] = 1;
+  } else if (porcentaje > 13 && porcentaje <= 26){
+    buffer[7][posiX] = 1;
+    buffer[7][posiX+1] = 1;
+    buffer[6][posiX] = 1;
+    buffer[6][posiX+1] = 1;
+  } else if (porcentaje > 26 && porcentaje <= 39){
+    buffer[7][posiX] = 1;
+    buffer[7][posiX+1] = 1;
+    buffer[6][posiX] = 1;
+    buffer[6][posiX+1] = 1;
+    buffer[5][posiX] = 1;
+    buffer[5][posiX+1] = 1;
+  } else if (porcentaje > 39 && porcentaje <= 52){
+    buffer[7][posiX] = 1;
+    buffer[7][posiX+1] = 1;
+    buffer[6][posiX] = 1;
+    buffer[6][posiX+1] = 1;
+    buffer[5][posiX] = 1;
+    buffer[5][posiX+1] = 1;
+    buffer[4][posiX] = 1;
+    buffer[4][posiX+1] = 1;
+  } else if (porcentaje > 52 && porcentaje <= 65){
+    buffer[7][posiX] = 1;
+    buffer[7][posiX+1] = 1;
+    buffer[6][posiX] = 1;
+    buffer[6][posiX+1] = 1;
+    buffer[5][posiX] = 1;
+    buffer[5][posiX+1] = 1;
+    buffer[4][posiX] = 1;
+    buffer[4][posiX+1] = 1;
+    buffer[3][posiX] = 1;
+    buffer[3][posiX+1] = 1;
+  } else if (porcentaje > 65 && porcentaje <= 78){
+    buffer[7][posiX] = 1;
+    buffer[7][posiX+1] = 1;
+    buffer[6][posiX] = 1;
+    buffer[6][posiX+1] = 1;
+    buffer[5][posiX] = 1;
+    buffer[5][posiX+1] = 1;
+    buffer[4][posiX] = 1;
+    buffer[4][posiX+1] = 1;
+    buffer[3][posiX] = 1;
+    buffer[3][posiX+1] = 1;
+    buffer[2][posiX] = 1;
+    buffer[2][posiX+1] = 1;
+  } else if (porcentaje > 78 && porcentaje <= 91){
+    buffer[7][posiX] = 1;
+    buffer[7][posiX+1] = 1;
+    buffer[6][posiX] = 1;
+    buffer[6][posiX+1] = 1;
+    buffer[5][posiX] = 1;
+    buffer[5][posiX+1] = 1;
+    buffer[4][posiX] = 1;
+    buffer[4][posiX+1] = 1;
+    buffer[3][posiX] = 1;
+    buffer[3][posiX+1] = 1;
+    buffer[2][posiX] = 1;
+    buffer[2][posiX+1] = 1;
+    buffer[1][posiX] = 1;
+    buffer[1][posiX+1] = 1;
+  } else if (porcentaje > 91 && porcentaje <= 100){
+    buffer[7][posiX] = 1;
+    buffer[7][posiX+1] = 1;
+    buffer[6][posiX] = 1;
+    buffer[6][posiX+1] = 1;
+    buffer[5][posiX] = 1;
+    buffer[5][posiX+1] = 1;
+    buffer[4][posiX] = 1;
+    buffer[4][posiX+1] = 1;
+    buffer[3][posiX] = 1;
+    buffer[3][posiX+1] = 1;
+    buffer[2][posiX] = 1;
+    buffer[2][posiX+1] = 1;
+    buffer[1][posiX] = 1;
+    buffer[1][posiX+1] = 1;
+    buffer[0][posiX] = 1;
+    buffer[0][posiX+1] = 1;
+  }
 
 }
 
