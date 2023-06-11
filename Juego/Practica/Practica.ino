@@ -314,13 +314,22 @@ void generarProyectil() {
     
     
      // Verificar si el proyectil impacta una torre y no ha impactado antes
-    if (buffer[posY + 1][posX] == 1 && !impactoP) {
+    if (buffer[posY + 1][posX] == 1 && !impactoP ) {
       // El proyectil impacta una torre, incrementar el contador de torres destruidas
       torresDestruidas++;
       // Borrar la torre del buffer
       buffer[posY + 1][posX] = 0;
       // Marcar el impacto como ocurrido
       impactoP = true;
+
+      if (torresDestruidas % 5 == 0 && torresDestruidas > 0){
+    if (cantidadVidad < 10){
+      cantidadVidad++;
+    }else{
+      Serial.println("Llegaste al maximo de vidas permitido");
+    }
+    
+  }
     }
 
     // Borrar el proyectil del buffer
