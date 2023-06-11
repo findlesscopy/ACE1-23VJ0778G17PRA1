@@ -107,10 +107,26 @@ void mostrarMatriz() {
 long int t0 = 0;
 long int t1 = 0;
 long int t2 = 0;
+long int pruebaa = 0;
+bool Nivelencurso = false;
 void loop() {
 
-  //configuracion();
+  //mostrarNivel();
+ if ((Nivelencurso == false && nivel == 1) || (Nivelencurso== false)){
+  mostrarNivel();
+  mostrarMatriz();
+  if ((millis()-pruebaa) >= 2000 ){
+    pruebaa = millis();
+    Nivelencurso = true;
+    ocultarNivel();
+    generarObjetivos();
+  }
+ }
 
+
+ if (Nivelencurso == true ){
+ 
+  //configuracion();
   t1 = millis();
   if ((t1 - t0) >=  map(velocidadJuego, 1, 16, 100, 10)) {
     t0 = millis();
@@ -144,10 +160,53 @@ void loop() {
   pintarAvion();
   mostrarMatriz();
   borrarAvion();
-  if (!inicio ){
-    inicio = true;
-    generarObjetivos();
-  }
+  // if (!inicio ){
+
+  //   //inicio = true;
+  //   generarObjetivos();
+  // }
+ }
+
+
+  //configuracion();
+
+  // t1 = millis();
+  // if ((t1 - t0) >=  map(velocidadJuego, 1, 16, 100, 10)) {
+  //   t0 = millis();
+  //   if (CAMBIAR_DIRECCION) {
+  //     xAvion--;
+  //     if (xAvion < 0) {
+  //       xAvion = 13;
+  //     }
+      
+  //   } else {
+  //     xAvion++;
+  //     if (xAvion > 13) {
+  //       xAvion = 0;
+       
+  //     }
+      
+  //   }
+  // }
+
+  // // Verifica si ha transcurrido 1 segundo
+  // if ((millis() - t2) >= 1000) {
+  //   t2 = millis(); // Reinicia el contador de tiempo
+  //    if(yAvion < 7){
+  //       yAvion++;
+  //    }else{
+  //      yAvion = 0; //pd: muerto
+  //    }
+  // }
+
+  // impactoAvionTorre();
+  // pintarAvion();
+  // mostrarMatriz();
+  // borrarAvion();
+  // if (!inicio ){
+  //   inicio = true;
+  //   generarObjetivos();
+  // }
 
 
 
@@ -164,8 +223,19 @@ void loop() {
 }
 
 void generarObjetivos() {
-  // Generar número de objetivos según el nivel del jugador
-  int numObjetivos = 3 + nivel; // Se aumenta en cada nivel
+
+  //if ((Nivelencurso == false && nivel == 1) || (Nivelencurso== false)){
+  // mostrarNivel();
+  // mostrarMatriz();
+  // delay(2000);
+  //if ((millis()-pruebaa) >= 2000 ){
+
+    // pruebaa = millis();
+    // //Nivelencurso = true;
+    // ocultarNivel();
+    // inicio = true;
+    // Generar número de objetivos según el nivel del jugador
+    int numObjetivos = 3 + nivel; // Se aumenta en cada nivel
   
   // Generar objetivos de manera aleatoria
   for (int i = 0; i < numObjetivos; i++) {
@@ -184,6 +254,29 @@ void generarObjetivos() {
       buffer[j][posX + desplazamiento] = 1;
     }
   }
+
+  //}
+ //}
+  // // Generar número de objetivos según el nivel del jugador
+  // int numObjetivos = 3 + nivel; // Se aumenta en cada nivel
+  
+  // // Generar objetivos de manera aleatoria
+  // for (int i = 0; i < numObjetivos; i++) {
+  //   // Generar posición aleatoria
+  //   int posX = random(0, 15); // Rango de 0 a 14 (columnas)
+  //   int posY = 7; // Fija la posición vertical en la última fila (y = 7)
+    
+  //   // Generar altura aleatoria entre 1 y 4
+  //   int altura = random(1, 5); // Rango de 1 a 4
+    
+  //   // Generar desplazamiento aleatorio
+  //   int desplazamiento = random(1, 3); // Rango de 1 a 3
+    
+  //   // Colocar objetivo en el buffer
+  //   for (int j = posY - altura + 1; j <= posY; j++) {
+  //     buffer[j][posX + desplazamiento] = 1;
+  //   }
+  // }
 }
 
 void generarProyectil() {
@@ -272,10 +365,13 @@ void verificarNivel() {
   // Si no quedan torres o la altura máxima supera un cierto valor, subir de nivel
   if (torresRestantes == 0 || maxAltura >= 5) {
     nivel++;
+
+    Nivelencurso = false;
+    pruebaa = millis();
     //Resetear avion a inicio de posicion
     xAvion = 0;
     yAvion = 0;
-    generarObjetivos();
+    //generarObjetivos();
   }
 }
 
@@ -301,6 +397,408 @@ void impactoAvionTorre() {
     }
   }
 }
+
+//Aqui es donde se hace el mostrar nivel
+
+void mostrarNivel(){
+    switch(nivel){
+
+      case 1: 
+      // Pintar numero 1
+      Serial.println("Empieza el nivel 1");
+      buffer[2][7] = 1;
+      buffer[5][7] = 1;
+      buffer[1][8] = 1;
+      buffer[2][8] = 1;
+      buffer[3][8] = 1;
+      buffer[4][8] = 1;
+      buffer[5][8] = 1;
+      buffer[5][9] = 1;
+
+      break;
+    case 2:
+      Serial.println("Empieza el nivel 2");
+      buffer[1][6] = 1;
+      buffer[1][7] = 1;
+      buffer[1][8] = 1;
+      buffer[1][9] = 1;
+      buffer[2][9] = 1;
+      buffer[3][9] = 1;
+      buffer[3][6] = 1;
+      buffer[3][7] = 1;
+      buffer[3][8] = 1;
+      buffer[5][6] = 1;
+      buffer[5][7] = 1;
+      buffer[5][8] = 1;
+      buffer[5][9] = 1;
+      buffer[4][6] = 1;
+      break;
+    case 3:
+    Serial.println("Empieza el nivel 3");
+      buffer[1][6] = 1;
+      buffer[1][7] = 1;
+      buffer[1][8] = 1;
+      buffer[1][9] = 1;
+      buffer[2][9] = 1;
+      buffer[3][9] = 1;
+      buffer[3][6] = 1;
+      buffer[3][7] = 1;
+      buffer[3][8] = 1;
+      buffer[5][6] = 1;
+      buffer[5][9] = 1;
+      buffer[5][7] = 1;
+      buffer[5][8] = 1;
+      buffer[5][9] = 1;
+      buffer[4][9] = 1;
+      break;
+    case 4:
+    Serial.println("Empieza el nivel 4");
+    // Es ->> | el que cierra
+      buffer[1][9] = 1;
+      buffer[2][9] = 1;
+      buffer[3][9] = 1;
+      buffer[5][9] = 1;
+      buffer[4][9] = 1;
+
+      // Es ->> | el que abre
+       buffer[1][6] = 1;
+      buffer[2][6] = 1;
+      buffer[3][6] = 1;
+
+      // Es ->> ---- de enmedio
+      buffer[3][6] = 1;
+      buffer[3][7] = 1;
+      buffer[3][8] = 1;
+
+    break;
+    case 5:
+    Serial.println("Empieza el nivel 5");
+    // Es ->> ----- de Arriba
+      buffer[1][6] = 1;
+      buffer[1][7] = 1;
+      buffer[1][8] = 1;
+      buffer[1][9] = 1;
+
+      // Es ->> | el que cierra
+
+      buffer[3][9] = 1;
+      buffer[5][9] = 1;
+      buffer[4][9] = 1;
+
+      // Es ->> | el que abre
+
+      buffer[2][6] = 1;
+      buffer[3][6] = 1;
+
+      // Es ->> ---- de enmedio
+      buffer[3][6] = 1;
+      buffer[3][7] = 1;
+      buffer[3][8] = 1;
+
+      // Es ->> ---- de abajo
+      buffer[5][6] = 1;
+      buffer[5][7] = 1;
+      buffer[5][8] = 1;
+
+    break;
+    case 6:
+    Serial.println("Empieza el nivel 6");
+    // Es ->> ----- de Arriba
+      buffer[1][6] = 1;
+      buffer[1][7] = 1;
+      buffer[1][8] = 1;
+      buffer[1][9] = 1;
+
+      // Es ->> | el que cierra
+
+      buffer[3][9] = 1;
+      buffer[5][9] = 1;
+      buffer[4][9] = 1;
+
+      // Es ->> | el que abre
+
+      buffer[2][6] = 1;
+      buffer[3][6] = 1;
+      buffer[4][6] = 1;
+      buffer[5][6] = 1;
+
+      // Es ->> ---- de enmedio
+      buffer[3][6] = 1;
+      buffer[3][7] = 1;
+      buffer[3][8] = 1;
+
+      // Es ->> ---- de abajo
+      buffer[5][6] = 1;
+      buffer[5][7] = 1;
+      buffer[5][8] = 1;
+
+    break;
+    case 7:
+    Serial.println("Empieza el nivel 7");
+    // Es ->> ----- de Arriba
+      buffer[1][6] = 1;
+      buffer[1][7] = 1;
+      buffer[1][8] = 1;
+      buffer[1][9] = 1;
+
+      // Es ->> | el que cierra
+
+      buffer[2][9] = 1;
+      buffer[3][9] = 1;
+      buffer[4][9] = 1;
+      buffer[5][9] = 1;
+
+    break;
+    case 8:
+    Serial.println("Empieza el nivel 8");
+    // Es ->> ----- de Arriba
+      buffer[1][6] = 1;
+      buffer[1][7] = 1;
+      buffer[1][8] = 1;
+      buffer[1][9] = 1;
+
+      // Es ->> | el que cierra
+
+      buffer[2][9] = 1;
+      buffer[3][9] = 1;
+      buffer[5][9] = 1;
+      buffer[4][9] = 1;
+
+      // Es ->> | el que abre
+
+      buffer[2][6] = 1;
+      buffer[3][6] = 1;
+      buffer[5][6] = 1;
+      buffer[4][6] = 1;
+
+      // Es ->> ---- de enmedio
+      buffer[3][6] = 1;
+      buffer[3][7] = 1;
+      buffer[3][8] = 1;
+
+      // Es ->> ---- de abajo
+      buffer[5][6] = 1;
+      buffer[5][7] = 1;
+      buffer[5][8] = 1;
+
+    break;
+    case 9:
+    Serial.println("Empieza el nivel 9");
+    // Es ->> ----- de Arriba
+      buffer[1][6] = 1;
+      buffer[1][7] = 1;
+      buffer[1][8] = 1;
+      buffer[1][9] = 1;
+
+      // Es ->> | el que cierra
+
+      buffer[2][9] = 1;
+      buffer[3][9] = 1;
+      buffer[5][9] = 1;
+      buffer[4][9] = 1;
+
+      // Es ->> | el que abre
+
+      buffer[2][6] = 1;
+      buffer[3][6] = 1;
+      buffer[5][6] = 1;
+
+      // Es ->> ---- de enmedio
+      buffer[3][6] = 1;
+      buffer[3][7] = 1;
+      buffer[3][8] = 1;
+
+      // Es ->> ---- de abajo
+
+      buffer[5][7] = 1;
+      buffer[5][8] = 1;
+
+    break;
+    case 10:
+    Serial.println("Empieza el nivel 10");
+    buffer[2][7-2] = 1;
+      buffer[1][8-2] = 1;
+      buffer[2][8-2] = 1;
+      buffer[3][8-2] = 1;
+      buffer[4][8-2] = 1;
+      buffer[5][8-2] = 1;
+      buffer[5][7-2] = 1;
+      buffer[5][9-2] = 1;
+      
+      // Es ->> ----- de Arriba
+      buffer[1][6+2] = 1;
+      buffer[1][7+2] = 1;
+      buffer[1][8+2] = 1;
+      buffer[1][9+2] = 1;
+
+      // Es ->> | el que cierra
+
+      buffer[2][9+2] = 1;
+      buffer[3][9+2] = 1;
+      buffer[5][9+2] = 1;
+      buffer[4][9+2] = 1;
+
+      // Es ->> | el que abre
+
+      buffer[2][6+2] = 1;
+      buffer[3][6+2] = 1;
+      buffer[5][6+2] = 1;
+      buffer[4][6+2] = 1;
+
+      // Es ->> ---- de abajo
+      buffer[5][6+2] = 1;
+      buffer[5][7+2] = 1;
+      buffer[5][8+2] = 1;
+
+    break;
+    case 11:
+    Serial.println("Empieza el nivel 11");
+    buffer[2][7-2] = 1;
+      buffer[1][8-2] = 1;
+      buffer[2][8-2] = 1;
+      buffer[3][8-2] = 1;
+      buffer[4][8-2] = 1;
+      buffer[5][8-2] = 1;
+      buffer[5][7-2] = 1;
+      buffer[5][9-2] = 1;
+
+      buffer[2][7+2] = 1;
+      buffer[1][8+2] = 1;
+      buffer[2][8+2] = 1;
+      buffer[3][8+2] = 1;
+      buffer[4][8+2] = 1;
+      buffer[5][8+2] = 1;
+      buffer[5][7+2] = 1;
+      buffer[5][9+2] = 1;
+
+    break;
+    case 12:
+    Serial.println("Empieza el nivel 12");
+    buffer[2][7-3] = 1;
+      buffer[1][8-3] = 1;
+      buffer[2][8-3] = 1;
+      buffer[3][8-3] = 1;
+      buffer[4][8-3] = 1;
+      buffer[5][8-3] = 1;
+      buffer[5][7-3] = 1;
+      buffer[5][9-3] = 1;
+
+      buffer[1][6+2] = 1;
+      buffer[1][7+2] = 1;
+      buffer[1][8+2] = 1;
+      buffer[1][9+2] = 1;
+      buffer[2][9+2] = 1;
+      buffer[3][9+2] = 1;
+      buffer[3][6+2] = 1;
+      buffer[3][7+2] = 1;
+      buffer[3][8+2] = 1;
+      buffer[5][6+2] = 1;
+      buffer[5][7+2] = 1;
+      buffer[5][8+2] = 1;
+      buffer[5][9+2] = 1;
+      buffer[4][6+2] = 1;
+
+    break;
+    case 13:
+    Serial.println("Empieza el nivel 13");
+    buffer[2][7-3] = 1;
+      buffer[1][8-3] = 1;
+      buffer[2][8-3] = 1;
+      buffer[3][8-3] = 1;
+      buffer[4][8-3] = 1;
+      buffer[5][8-3] = 1;
+      buffer[5][7-3] = 1;
+      buffer[5][9-3] = 1;
+
+      buffer[1][6+2] = 1;
+      buffer[1][7+2] = 1;
+      buffer[1][8+2] = 1;
+      buffer[1][9+2] = 1;
+      buffer[2][9+2] = 1;
+      buffer[3][9+2] = 1;
+      buffer[3][6+2] = 1;
+      buffer[3][7+2] = 1;
+      buffer[3][8+2] = 1;
+      buffer[5][6+2] = 1;
+      buffer[5][7+2] = 1;
+      buffer[5][8+2] = 1;
+      buffer[5][9+2] = 1;
+      buffer[4][9+2] = 1;
+
+    break;
+    case 14:
+    Serial.println("Empieza el nivel 14");
+    buffer[2][7-3] = 1;
+      buffer[1][8-3] = 1;
+      buffer[2][8-3] = 1;
+      buffer[3][8-3] = 1;
+      buffer[4][8-3] = 1;
+      buffer[5][8-3] = 1;
+      buffer[5][7-3] = 1;
+      buffer[5][9-3] = 1;
+
+      // Es ->> | el que cierra
+      buffer[1][9+2] = 1;
+      buffer[2][9+2] = 1;
+      buffer[3][9+2] = 1;
+      buffer[5][9+2] = 1;
+      buffer[4][9+2] = 1;
+
+      // Es ->> | el que abre
+       buffer[1][6+2] = 1;
+      buffer[2][6+2] = 1;
+      buffer[3][6+2] = 1;
+
+      // Es ->> ---- de enmedio
+      buffer[3][6+2] = 1;
+      buffer[3][7+2] = 1;
+      buffer[3][8+2] = 1;
+
+    break;
+    default:
+      Serial.println("Ya no hay más niveles");
+
+    }
+}
+
+
+void ocultarNivel(){
+  switch(nivel){
+
+      case 1: 
+      Serial.println("Empieza el nivel 1");
+      buffer[2][7] = 0;
+      buffer[5][7] = 0;
+      buffer[1][8] = 0;
+      buffer[2][8] = 0;
+      buffer[3][8] = 0;
+      buffer[4][8] = 0;
+      buffer[5][8] = 0;
+      buffer[5][9] = 0;
+      break;
+      case 2:
+      Serial.println("Nivel 2");
+      buffer[1][6] = 0;
+      buffer[1][7] = 0;
+      buffer[1][8] = 0;
+      buffer[1][9] = 0;
+      buffer[2][9] = 0;
+      buffer[3][9] = 0;
+      buffer[3][6] = 0;
+      buffer[3][7] = 0;
+      buffer[3][8] = 0;
+      buffer[5][6] = 0;
+      buffer[5][7] = 0;
+      buffer[5][8] = 0;
+      buffer[5][9] = 0;
+      buffer[4][6] = 0;
+      break;
+    default:
+      Serial.println("No sirve");
+      break;
+  }
+}
+
 
 void configuracion() {
   // Mostrar barras horizontales de velocidad y vidas iniciales
@@ -360,4 +858,3 @@ void configuracion() {
     mostrarMatriz();
   }
 }
-
