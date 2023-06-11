@@ -142,7 +142,7 @@ void loop() {
 
   if (inicioPartida == true){
 
-  if ((Nivelencurso == false && nivel == 1) || (Nivelencurso== false)){
+  if ((Nivelencurso== false)){
   mostrarNivel();
   mostrarMatriz();
   if ((millis()-pruebaa) >= 2000 ){
@@ -171,9 +171,7 @@ void loop() {
       xAvion++;
       if (xAvion > 13) {
         xAvion = 0;
-       
       }
-      
     }
   }
 
@@ -281,9 +279,6 @@ void generarObjetivos() {
     // inicio = true;
     // Generar número de objetivos según el nivel del jugador
     int numObjetivos = 3 + nivel; // Se aumenta en cada nivel
-
-    Serial.println(nivel);
-    Serial.println(numObjetivos);
 
   
   // Generar objetivos de manera aleatoria
@@ -426,8 +421,9 @@ void generarProyectil() {
 void verificarNivel() {
   int torresRestantes = 0;
   int maxAltura = 0;
+  
 
-  // Contar el número de torres restantes en el buffer y obtener la altura máxima
+    // Contar el número de torres restantes en el buffer y obtener la altura máxima
   for (int i = 0; i < 8; i++) {
     for (int j = 0; j < 16; j++) {
       if (buffer[i][j] == 1) {
@@ -443,11 +439,16 @@ void verificarNivel() {
     }
   }
 
-  // Si no quedan torres o la altura máxima supera un cierto valor, subir de nivel
-  if (torresRestantes == 0 || maxAltura >= 5) {
+  Serial.println("Arriba de torres");
+  Serial.println(torresRestantes);
+  Serial.println("Arriba de Altura");
+  Serial.println(maxAltura);
+
+   // Si no quedan torres o la altura máxima supera un cierto valor, subir de nivel
+   // Se quitó el igual porque se termina el nivel por un error de suma o algo así
+  if (torresRestantes == 0 || maxAltura > 5) {
     nivel++;
     vaciarRespaldo();
-
     Nivelencurso = false;
     pruebaa = millis();
     //Resetear avion a inicio de posicion
@@ -1227,14 +1228,15 @@ void pintarMenuPrincipal(){
       buffer[5][14] = 1;
 
 
-      if (digitalRead(btn_izq) == HIGH ) {
+  if (digitalRead(btn_izq) == HIGH ) {
         pruebaa = millis();
         inicioPartida = true;
         ocultarNivel();
         // mostrarNivel();
         // mostrarMatriz();
       // Acciones del botón
-  } else if (digitalRead(btn_izq) == HIGH ) {
+  } else if (digitalRead(btn_der) == HIGH ) {
+        // Configuracion
         ocultarNivel();
       // Acciones del botón
   } else if (digitalRead(btn_Disp) == HIGH ) {
