@@ -17,6 +17,10 @@ int velocidadJuego = 0; //controla la velocidad de todo
 int cantidadVidad = 3; //controla la cantidad de vidas inicial hay 3
 int posXBala = 0;
 int posYBala = 0;
+const int numPuntajes = 5;  // Número de datos a almacenar
+int datos[numPuntajes];     // Arreglo para almacenar los datos
+int contadorPuntajes = 0;        // Índice del siguiente dato a almacenar
+
 
 void setup() {
   Serial.begin(9600);  // Inicializar la comunicación serial a 9600 bps
@@ -37,10 +41,6 @@ void setup() {
   pinMode(btn_izq, INPUT);
   //boton derecha
   pinMode(btn_der, INPUT);
-
-
-  
-  
 
 }
 
@@ -129,11 +129,19 @@ long int reanudar = 0;
 bool Nivelencurso = false;
 bool isPaused = false;
 bool presionado_actualmente = false;
+bool inicioPartida = false;
 void loop() {
 
 // mostrarVidasRestantes();
 //   mostrarMatriz();
- if ((Nivelencurso == false && nivel == 1) || (Nivelencurso== false)){
+  if (inicioPartida == false){
+    pintarMenuPrincipal();
+    mostrarMatriz();
+  }
+
+  if (inicioPartida == true){
+
+  if ((Nivelencurso == false && nivel == 1) || (Nivelencurso== false)){
   mostrarNivel();
   mostrarMatriz();
   if ((millis()-pruebaa) >= 2000 ){
@@ -202,8 +210,7 @@ void loop() {
 
       if (isPaused) {
         Serial.println("Programa pausado");
-        
-       
+      
         while (isPaused) {
           ocultarNivel();
           mostrarVidasRestantes();
@@ -225,7 +232,7 @@ void loop() {
                     isPaused = !isPaused;
                     Serial.println("DOS SEGUNDOS");
                     ocultarNivel();
-                    delay(1000);
+                    //delay(50);
                     respaldoTorres();
                 }
             }
@@ -234,32 +241,32 @@ void loop() {
                 delay(500);
                 if (!digitalRead(btn_k)) {
                     // Código para 3 segundos
+                    isPaused = !isPaused;
                     Serial.println("TRES SEGUNDOS");
-                    delay(1000);
+                    delay(50);
+                    ocultarNivel();
+                    inicioPartida = false;
+                    reiniciarJuego();
                 }
             }
         }
     } else {
         presionado_actualmente = false;
     }
-
-
-
-
         }
-        
-      
      } else {
         Serial.println("Programa reanudado");
       }
-
   }
   }
 
+  }
 }
 
 
 void generarObjetivos() {
+
+  
 
   //if ((Nivelencurso == false && nivel == 1) || (Nivelencurso== false)){
   // mostrarNivel();
@@ -273,6 +280,10 @@ void generarObjetivos() {
     // inicio = true;
     // Generar número de objetivos según el nivel del jugador
     int numObjetivos = 3 + nivel; // Se aumenta en cada nivel
+
+    Serial.println(nivel);
+    Serial.println(numObjetivos);
+
   
   // Generar objetivos de manera aleatoria
   for (int i = 0; i < numObjetivos; i++) {
@@ -466,10 +477,9 @@ void impactoAvionTorre() {
           // Mostrar el buffer en la matriz
           mostrarMatriz();
           }else{
+            // Para terminar el juego
+            ocultarNivel();
             sinVidas();
-            // Para terminar el juego mientras
-            exit(0);
-            
           }
         }
       }
@@ -1129,9 +1139,166 @@ for (int i = 0; i < 8; i++) {
 }
 }
 
+void reiniciarJuego(){
+
+nivel = 1;
+torresDestruidas = 0; //pts de las torres destruidas
+inicio = false; // inidicar el inicio del juego
+velocidadJuego = 0; //controla la velocidad de todo
+cantidadVidad = 3; //controla la cantidad de vidas inicial hay 3
+posXBala = 0;
+posYBala = 0;
+xAvion = 0;
+yAvion = 0;
+CAMBIAR_DIRECCION = false; 
+Nivelencurso = false;
+isPaused = false;
+presionado_actualmente = false;
+inicioPartida = false;
+vaciarRespaldo();
+
+
+}
+
+void pintarMenuPrincipal(){
+  // Avion
+      buffer[2][1] = 1;
+      buffer[3][1] = 1;
+      buffer[3][2] = 1;
+      buffer[3][3] = 1;
+      buffer[5][2] = 1;
+
+  // Estadisticas
+      buffer[0][5] = 1;
+      buffer[0][6] = 1;
+      buffer[0][7] = 1;
+      buffer[0][8] = 1;
+      buffer[0][9] = 1;
+      buffer[0][10] = 1;
+
+      buffer[1][5] = 1;
+      buffer[1][6] = 1;
+      buffer[1][7] = 1;
+      buffer[1][8] = 1;
+      buffer[1][9] = 1;
+      buffer[1][10] = 1;
+
+
+      buffer[2][5] = 1;
+      buffer[2][7] = 1;
+      buffer[2][8] = 1;
+      buffer[2][9] = 1;
+      buffer[2][10] = 1;
+
+      buffer[3][5] = 1;
+      buffer[3][7] = 1;
+      buffer[3][8] = 1;
+      buffer[3][10] = 1;
+
+
+      buffer[4][5] = 1;
+      buffer[4][8] = 1;
+      buffer[4][10] = 1;
+
+      buffer[5][5] = 1;
+      buffer[5][10] = 1;
+
+      buffer[6][5] = 1;
+      buffer[6][6] = 1;
+      buffer[6][7] = 1;
+      buffer[6][8] = 1;
+      buffer[6][9] = 1;
+      buffer[6][10] = 1;
+
+
+      buffer[7][5] = 1;
+      buffer[7][6] = 1;
+      buffer[7][7] = 1;
+      buffer[7][8] = 1;
+      buffer[7][9] = 1;
+      buffer[7][10] = 1;
+
+  // Configuracion
+      buffer[2][13] = 1;
+      buffer[2][14] = 1;
+      buffer[3][12] = 1;
+      buffer[4][12] = 1;
+      buffer[5][13] = 1;
+      buffer[5][14] = 1;
+
+
+      if (digitalRead(btn_izq) == HIGH ) {
+        pruebaa = millis();
+        inicioPartida = true;
+        ocultarNivel();
+        // mostrarNivel();
+        // mostrarMatriz();
+      // Acciones del botón
+  } else if (digitalRead(btn_izq) == HIGH ) {
+        ocultarNivel();
+      // Acciones del botón
+  } else if (digitalRead(btn_Disp) == HIGH ) {
+    mostrarEstadisticas();
+       //Serial.println("Últimos 5 datos:");
+  //   for (int i = 0; i < numPuntajes; i++) {
+  //   int indice = (contadorPuntajes + i) % numPuntajes;
+  //   Serial.print("Puntaje ");
+  //   Serial.print(i);
+  //   Serial.print(": ");
+  //   Serial.println(datos[indice]);
+  // }
+
+  
+  } 
+
+  
+}
+
 
 void sinVidas(){
+  // Almacena el ultimo puntaje
+    // Obtener el dato actual
+    int puntajeActual = torresDestruidas;  // Debes proporcionar tu propia lógica para obtener el dato
+
+  // Almacenar el dato en el arreglo
+  datos[contadorPuntajes] = puntajeActual;
+  
+  // Incrementar el contador
+  contadorPuntajes = (contadorPuntajes + 1) % numPuntajes;
+    // puntaje = torresdestruidas;
     Serial.println("Ya no tiene vidas");
+    inicioPartida = false;
+    reiniciarJuego();
+    
+}
+
+
+void mostrarEstadisticas(){
+  // Calcular la suma de los datos almacenados
+  int sumaTotal = 0;
+  for (int i = 0; i < numPuntajes; i++) {
+    sumaTotal += datos[i];
+  }
+
+  // Calcular y mostrar el porcentaje de cada valor
+  Serial.println("Porcentaje de cada valor:");
+  for (int i = 0; i < numPuntajes; i++) {
+    int porcentaje = (datos[i] * 100) / sumaTotal;
+    Serial.print("Dato ");
+    Serial.print(i);
+    Serial.print(": ");
+    Serial.print(datos[i]);
+    Serial.print(" (");
+    Serial.print(porcentaje);
+    Serial.println("%)");
+  }
+
+  // Mostrar la suma total
+  Serial.print("Suma total: ");
+  Serial.println(sumaTotal);
+
+
+
 }
 
 void configuracion() {
