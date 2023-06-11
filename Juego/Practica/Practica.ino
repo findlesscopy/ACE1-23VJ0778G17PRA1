@@ -15,6 +15,8 @@ int torresDestruidas = 0; //pts de las torres destruidas
 bool inicio = false; // inidicar el inicio del juego
 int velocidadJuego = 0; //controla la velocidad de todo
 int cantidadVidad = 3; //controla la cantidad de vidas inicial hay 3
+int posXBala = 0;
+int posYBala = 0;
 
 void setup() {
   Serial.begin(9600);  // Inicializar la comunicación serial a 9600 bps
@@ -52,6 +54,15 @@ void pintarLED(int x, int y) {
 
 
 byte buffer[8][16] = { { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+                       { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+                       { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+                       { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+                       { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+                       { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+                       { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+                       { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } };
+
+byte copiatorres[8][16] = { { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
                        { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
                        { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
                        { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
@@ -111,8 +122,13 @@ void mostrarMatriz() {
 long int t0 = 0;
 long int t1 = 0;
 long int t2 = 0;
+long int tiempo0 = 0;
+long int tiempo1 = 0;
 long int pruebaa = 0;
+long int reanudar = 0;
 bool Nivelencurso = false;
+bool isPaused = false;
+bool presionado_actualmente = false;
 void loop() {
 
 // mostrarVidasRestantes();
@@ -127,6 +143,7 @@ void loop() {
     generarObjetivos();
   }
  }
+
 
 
  if (Nivelencurso == true ){
@@ -177,11 +194,70 @@ void loop() {
   } else if (digitalRead(btn_Disp) == HIGH){
     generarProyectil();
   } else if (digitalRead(btn_k) == HIGH){
-    menuPause();
+
+    delay(50);
+  
+    if (digitalRead(btn_k) == HIGH) {
+      isPaused = !isPaused; // Cambiar el estado de pausa
+
+      if (isPaused) {
+        Serial.println("Programa pausado");
+        
+       
+        while (isPaused) {
+          ocultarNivel();
+          mostrarVidasRestantes();
+           mostrarMatriz();
+
+        tiempo1 = millis();
+    if (digitalRead(btn_k)) {
+        if (!presionado_actualmente) {
+            presionado_actualmente = true;
+            tiempo0 = millis();
+        } else {
+            // Controlamos el tiempo
+            long int diferencia = tiempo1 - tiempo0;
+            if (diferencia >= 1800 && diferencia <= 2300) {
+                Serial.println("DOS");
+                delay(500); // Que suelte el botón
+                if (!digitalRead(btn_k)) {
+                    // Código para 2 segundos
+                    isPaused = !isPaused;
+                    Serial.println("DOS SEGUNDOS");
+                    ocultarNivel();
+                    delay(1000);
+                    respaldoTorres();
+                }
+            }
+            if (diferencia >= 2800 && diferencia <= 3300) {
+                Serial.print("TRES");
+                delay(500);
+                if (!digitalRead(btn_k)) {
+                    // Código para 3 segundos
+                    Serial.println("TRES SEGUNDOS");
+                    delay(1000);
+                }
+            }
+        }
+    } else {
+        presionado_actualmente = false;
+    }
+
+
+
+
+        }
+        
+      
+     } else {
+        Serial.println("Programa reanudado");
+      }
+
+  }
   }
 
-  
 }
+
 
 void generarObjetivos() {
 
@@ -213,6 +289,7 @@ void generarObjetivos() {
     // Colocar objetivo en el buffer
     for (int j = posY - altura + 1; j <= posY; j++) {
       buffer[j][posX + desplazamiento] = 1;
+      copiatorres[j][posX + desplazamiento] = 1;
     }
   }
 
@@ -238,6 +315,27 @@ void generarObjetivos() {
   //     buffer[j][posX + desplazamiento] = 1;
   //   }
   // }
+}
+
+void respaldoTorres(){
+  for (int i = 0; i < 8; i++) {
+    for (int j = 0; j < 16; j++) {
+      if (copiatorres[i][j] == 1){
+        buffer[i][j] = 1;
+        //copiatorres[i][j] = 0;
+      }
+    }
+} 
+}
+
+void vaciarRespaldo(){
+  for (int i = 0; i < 8; i++) {
+    for (int j = 0; j < 16; j++) {
+      if (copiatorres[i][j] == 1){
+        copiatorres[i][j] = 0;
+      }
+    }
+}
 }
 
 void generarProyectil() {
@@ -280,6 +378,7 @@ void generarProyectil() {
       torresDestruidas++;
       // Borrar la torre del buffer
       buffer[posY + 1][posX] = 0;
+      copiatorres[posY +1][posX] = 0;
       // Marcar el impacto como ocurrido
       impactoP = true;
 
@@ -335,6 +434,7 @@ void verificarNivel() {
   // Si no quedan torres o la altura máxima supera un cierto valor, subir de nivel
   if (torresRestantes == 0 || maxAltura >= 5) {
     nivel++;
+    vaciarRespaldo();
 
     Nivelencurso = false;
     pruebaa = millis();
