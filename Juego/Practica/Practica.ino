@@ -388,10 +388,19 @@ void impactoAvionTorre() {
           if (yAvion < 0) {
             yAvion = 0;
           }
+          Serial.println(cantidadVidad);
+          if(cantidadVidad > 1){
+            cantidadVidad--;
           // Actualizar la posición del avión en el buffer
           pintarAvion();
           // Mostrar el buffer en la matriz
           mostrarMatriz();
+          }else{
+            sinVidas();
+            // Para terminar el juego mientras
+            exit(0);
+            
+          }
         }
       }
     }
@@ -399,13 +408,10 @@ void impactoAvionTorre() {
 }
 
 //Aqui es donde se hace el mostrar nivel
-
 void mostrarNivel(){
     switch(nivel){
 
       case 1: 
-      // Pintar numero 1
-      Serial.println("Empieza el nivel 1");
       buffer[2][7] = 1;
       buffer[5][7] = 1;
       buffer[1][8] = 1;
@@ -417,7 +423,6 @@ void mostrarNivel(){
 
       break;
     case 2:
-      Serial.println("Empieza el nivel 2");
       buffer[1][6] = 1;
       buffer[1][7] = 1;
       buffer[1][8] = 1;
@@ -434,7 +439,6 @@ void mostrarNivel(){
       buffer[4][6] = 1;
       break;
     case 3:
-    Serial.println("Empieza el nivel 3");
       buffer[1][6] = 1;
       buffer[1][7] = 1;
       buffer[1][8] = 1;
@@ -452,7 +456,6 @@ void mostrarNivel(){
       buffer[4][9] = 1;
       break;
     case 4:
-    Serial.println("Empieza el nivel 4");
     // Es ->> | el que cierra
       buffer[1][9] = 1;
       buffer[2][9] = 1;
@@ -472,7 +475,6 @@ void mostrarNivel(){
 
     break;
     case 5:
-    Serial.println("Empieza el nivel 5");
     // Es ->> ----- de Arriba
       buffer[1][6] = 1;
       buffer[1][7] = 1;
@@ -502,7 +504,6 @@ void mostrarNivel(){
 
     break;
     case 6:
-    Serial.println("Empieza el nivel 6");
     // Es ->> ----- de Arriba
       buffer[1][6] = 1;
       buffer[1][7] = 1;
@@ -534,7 +535,6 @@ void mostrarNivel(){
 
     break;
     case 7:
-    Serial.println("Empieza el nivel 7");
     // Es ->> ----- de Arriba
       buffer[1][6] = 1;
       buffer[1][7] = 1;
@@ -550,7 +550,6 @@ void mostrarNivel(){
 
     break;
     case 8:
-    Serial.println("Empieza el nivel 8");
     // Es ->> ----- de Arriba
       buffer[1][6] = 1;
       buffer[1][7] = 1;
@@ -583,7 +582,6 @@ void mostrarNivel(){
 
     break;
     case 9:
-    Serial.println("Empieza el nivel 9");
     // Es ->> ----- de Arriba
       buffer[1][6] = 1;
       buffer[1][7] = 1;
@@ -615,7 +613,6 @@ void mostrarNivel(){
 
     break;
     case 10:
-    Serial.println("Empieza el nivel 10");
     buffer[2][7-2] = 1;
       buffer[1][8-2] = 1;
       buffer[2][8-2] = 1;
@@ -652,7 +649,6 @@ void mostrarNivel(){
 
     break;
     case 11:
-    Serial.println("Empieza el nivel 11");
     buffer[2][7-2] = 1;
       buffer[1][8-2] = 1;
       buffer[2][8-2] = 1;
@@ -673,7 +669,6 @@ void mostrarNivel(){
 
     break;
     case 12:
-    Serial.println("Empieza el nivel 12");
     buffer[2][7-3] = 1;
       buffer[1][8-3] = 1;
       buffer[2][8-3] = 1;
@@ -700,7 +695,6 @@ void mostrarNivel(){
 
     break;
     case 13:
-    Serial.println("Empieza el nivel 13");
     buffer[2][7-3] = 1;
       buffer[1][8-3] = 1;
       buffer[2][8-3] = 1;
@@ -727,7 +721,6 @@ void mostrarNivel(){
 
     break;
     case 14:
-    Serial.println("Empieza el nivel 14");
     buffer[2][7-3] = 1;
       buffer[1][8-3] = 1;
       buffer[2][8-3] = 1;
@@ -761,44 +754,19 @@ void mostrarNivel(){
     }
 }
 
-
+// Aquí se quitan los niveles
 void ocultarNivel(){
-  switch(nivel){
-
-      case 1: 
-      Serial.println("Empieza el nivel 1");
-      buffer[2][7] = 0;
-      buffer[5][7] = 0;
-      buffer[1][8] = 0;
-      buffer[2][8] = 0;
-      buffer[3][8] = 0;
-      buffer[4][8] = 0;
-      buffer[5][8] = 0;
-      buffer[5][9] = 0;
-      break;
-      case 2:
-      Serial.println("Nivel 2");
-      buffer[1][6] = 0;
-      buffer[1][7] = 0;
-      buffer[1][8] = 0;
-      buffer[1][9] = 0;
-      buffer[2][9] = 0;
-      buffer[3][9] = 0;
-      buffer[3][6] = 0;
-      buffer[3][7] = 0;
-      buffer[3][8] = 0;
-      buffer[5][6] = 0;
-      buffer[5][7] = 0;
-      buffer[5][8] = 0;
-      buffer[5][9] = 0;
-      buffer[4][6] = 0;
-      break;
-    default:
-      Serial.println("No sirve");
-      break;
-  }
+for (int i = 0; i < 8; i++) {
+    for (int j = 0; j < 16; j++) {
+        buffer[i][j] = 0;
+    }
+}
 }
 
+
+void sinVidas(){
+    Serial.println("Ya no tiene vidas");
+}
 
 void configuracion() {
   // Mostrar barras horizontales de velocidad y vidas iniciales
