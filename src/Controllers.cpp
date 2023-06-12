@@ -41,7 +41,7 @@ int nivel = 0;
 int torresDestruidas = 0;  // pts de las torres destruidas
 bool inicio = false;       // inidicar el inicio del juego
 int velocidadJuego = 0;    // controla la velocidad de todo
-int cantidadVidad = 1;     // controla la cantidad de vidas inicial hay 3
+int cantidadVidad = 3;     // controla la cantidad de vidas inicial hay 3
 const int numPuntajes = 5; // Número de datos a almacenar
 int datos[numPuntajes];    // Arreglo para almacenar los datos
 int contadorPuntajes = 0;  // Índice del siguiente dato a almacenar
@@ -138,7 +138,13 @@ void generarObjetivos()
     int altura = random(1, 5); // Rango de 1 a 4
 
     // Generar desplazamiento aleatorio
-    int desplazamiento = random(1, 3); // Rango de 1 a 3
+    int desplazamiento;
+    if(nivel <= 4){
+      desplazamiento = random(1, 3); // Rango de 1 a 3
+    }else{
+      desplazamiento = random(1,2); // Rango de 1 a 3
+    }
+    
 
     // Colocar objetivo en el buffer
     for (int j = posY - altura + 1; j <= posY; j++)
@@ -314,7 +320,7 @@ void verificarNivel()
 
   // Si no quedan torres o la altura máxima supera un cierto valor, subir de nivel
   // Se quitó el igual porque se termina el nivel por un error de suma o algo así
-  if (torresRestantes == 0 || maxAltura > 5)
+  if (torresRestantes == 0)
   {
     nivel++;
     vaciarRespaldo();
@@ -1284,16 +1290,16 @@ void pintarMenuPrincipal()
     mostrarEstadisticas();
     mostrarMatriz();
 
-    if (digitalRead(BTN_K) == LOW && last_btn_right_state == HIGH)
+    if (digitalRead(BTN_K) == LOW)
     {
 
       delay(50);
 
-      if (digitalRead(BTN_K) == LOW && last_BTN_K_state == HIGH)
+      if (digitalRead(BTN_K) == LOW)
       {
 
         tiempo1 = millis();
-        if (digitalRead(BTN_K) == LOW && last_btn_right_state == HIGH)
+        if (digitalRead(BTN_K) == LOW)
         {
           if (!presionado_actualmente)
           {
@@ -1316,6 +1322,8 @@ void pintarMenuPrincipal()
                 delay(50);
                 ocultarNivel();
                 verEstadisticas = false;
+                tiempo0 = millis();
+                //tiempo1 = 0;
               }
             }
           }
@@ -1327,6 +1335,7 @@ void pintarMenuPrincipal()
       }
     }
   }
+  
 
   if (digitalRead(BTN_DER) == LOW && last_btn_right_state == HIGH)
   {
@@ -1554,9 +1563,7 @@ void game_mode()
   }
 }
 
-void estadisticas_mode()
-{
-}
+
 
 void configuration_mode()
 {
@@ -1580,6 +1587,7 @@ void configuration_mode()
   mostrarMatriz();
 
   // Leer los valores de los potenciómetros para cambiar la longitud de las barras
+ 
   while (true)
   {
     // Leer valor del potenciómetro de velocidad (rango de 0 a 1023)
@@ -1592,7 +1600,7 @@ void configuration_mode()
     int valorVidas = analogRead(A1);
     // Mapear el valor a un rango de 0 a 10 (longitud de la barra de vidas)
     int longitudVidas = map(valorVidas, 0, 1023, 3, 10);
-    cantidadVidad = valorVidas;
+    cantidadVidad = longitudVidas;
 
     /*/ Imprimir la longitud de la velocidad en el monitor serie
     Serial.print("Longitud de la velocidad: ");
