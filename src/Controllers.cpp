@@ -16,7 +16,7 @@ int last_BTN_K_state = HIGH;
 // MATRIX
 bool controller_init_matrix = false;
 
-int estado_global = 0;
+int estado_global = 1;
 // Some variables to manage the configurate mode
 unsigned long btn_init_start_time;
 bool btn_init_pressed = false;
@@ -42,7 +42,7 @@ int nivel = 0;
 int torresDestruidas = 0; //pts de las torres destruidas
 bool inicio = false; // inidicar el inicio del juego
 int velocidadJuego = 0; //controla la velocidad de todo
-int cantidadVidad = 20; //controla la cantidad de vidas inicial hay 3
+int cantidadVidad = 3; //controla la cantidad de vidas inicial hay 3
 const int numPuntajes = 5;  // Número de datos a almacenar
 int datos[numPuntajes];     // Arreglo para almacenar los datos
 int contadorPuntajes = 0;        // Índice del siguiente dato a almacenar
@@ -1315,8 +1315,6 @@ void game_mode(){
   }
  }
 
-
-
  if (Nivelencurso == true ){
  
   //configuracion();
@@ -1353,32 +1351,36 @@ void game_mode(){
   borrarAvion();
 
  }
-
-  if (digitalRead(BTN_IZQ) == HIGH ) {
-    // Acciones del botón
+  if(digitalRead(BTN_IZQ) == LOW && last_btn_right_state == HIGH){
     CAMBIAR_DIRECCION = true;
-  } else if (digitalRead(BTN_DER) == HIGH ) {
-    // Acciones del botón
-    CAMBIAR_DIRECCION = false;
-  } else if (digitalRead(BTN_D) == HIGH){
+  }
+
+  if(digitalRead(BTN_D) == LOW && last_btn_right_state == HIGH){
     generarProyectil();
-  } else if (digitalRead(BTN_K) == HIGH){
+  }
 
-    delay(50);
-  
-    if (digitalRead(BTN_K) == HIGH) {
+  if(digitalRead(BTN_DER) == LOW && last_btn_right_state == HIGH){
+    //buttons_mode = 3;
+    CAMBIAR_DIRECCION = false;
+  }
+ if (digitalRead(BTN_K) == LOW && last_BTN_K_state == HIGH){
+    Serial.println("Presiona el boton K");
+
+
+    if (digitalRead(BTN_K) == LOW && last_BTN_K_state == HIGH) {
+      Serial.println("hOLAS");
       isPaused = !isPaused; // Cambiar el estado de pausa
-
+      
       if (isPaused) {
         Serial.println("Programa pausado");
       
         while (isPaused) {
           ocultarNivel();
           mostrarVidasRestantes();
-           mostrarMatriz();
+          mostrarMatriz();
 
         tiempo1 = millis();
-    if (digitalRead(BTN_K)) {
+    if (digitalRead(BTN_K) == LOW) {
         if (!presionado_actualmente) {
             presionado_actualmente = true;
             tiempo0 = millis();
@@ -1388,7 +1390,7 @@ void game_mode(){
             if (diferencia >= 1800 && diferencia <= 2300) {
                 Serial.println("DOS");
                 delay(500); // Que suelte el botón
-                if (!digitalRead(BTN_K)) {
+                if (!digitalRead(BTN_K) == LOW) {
                     // Código para 2 segundos
                     isPaused = !isPaused;
                     Serial.println("DOS SEGUNDOS");
@@ -1400,7 +1402,7 @@ void game_mode(){
             if (diferencia >= 2800 && diferencia <= 3300) {
                 Serial.print("TRES");
                 delay(500);
-                if (!digitalRead(BTN_K)) {
+                if (!digitalRead(BTN_K) == LOW) {
                     // Código para 3 segundos
                     isPaused = !isPaused;
                     Serial.println("TRES SEGUNDOS");
@@ -1415,10 +1417,11 @@ void game_mode(){
         presionado_actualmente = false;
     }
         }
+        }
      } else {
         Serial.println("Programa reanudado");
       }
-  }
+  
   }
 
   }
@@ -1453,13 +1456,13 @@ void configuration_mode() {
     int valorVelocidad = analogRead(A0);
     // Mapear el valor a un rango de 0 a 16 (longitud de la barra de velocidad)
     int longitudVelocidad = map(valorVelocidad, 0, 1023, 0, 16);
-    //velocidadJuego = longitudVelocidad;
+    velocidadJuego = longitudVelocidad;
 
     // Leer valor del potenciómetro de vidas (rango de 0 a 1023)
     int valorVidas = analogRead(A1);
     // Mapear el valor a un rango de 0 a 10 (longitud de la barra de vidas)
     int longitudVidas = map(valorVidas, 0, 1023, 3, 10);
-    //cantidadVidad = valorVidas;
+    cantidadVidad = valorVidas;
 
     /*/ Imprimir la longitud de la velocidad en el monitor serie
     Serial.print("Longitud de la velocidad: ");
