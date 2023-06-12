@@ -2,11 +2,11 @@
     Código fuente - Práctica 1 - Arquitectura de Computadores y Ensambladores 1
     Grupo:  17
     Integrantes:
-        - 
-        - 
-        - 
+        - Roberto Carlos Gómez Donis 202000544
+        - Edgardo Andrés Nil Guzmán 20180119
+        - César André Ramírez Dávila 202010816
         - José Manuel Ibarra Pirir 202001800
-        - 
+        - Ángel Francisco Sique Santos 202012039
 */
 
 //Librerias que se usan
@@ -37,7 +37,7 @@ void setup() {
 }
 
 void mode_0() {
-  while(buttons_mode != 1){
+  while(estado_global == 0 ){
     initial_mode();
     screen.setMatrix(resizedMessage);
     if(!controller_init_matrix){
@@ -55,7 +55,14 @@ void mode_0() {
 }
 
 void loop() {
-  mode_0();
-  game_mode();
+  if(estado_global == 0){
+    Serial.println("Estoy en el mensaje");
+    mode_0();
+  }
+  else if(estado_global == 1){
+    Serial.println("Estoy en el menu");
+      menu_mode();
+  }
+
 }
 
