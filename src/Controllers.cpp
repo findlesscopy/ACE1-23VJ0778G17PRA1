@@ -159,14 +159,14 @@ void pintarMenuPrincipal()
     buttons_mode = 3;
     Serial.println("Change to GAME mode");
     ocultarNivel();
-    configuration_mode();
+    game_mode();
   }
 
   if(digitalRead(BTN_D) == LOW && last_btn_right_state == HIGH){
     buttons_mode = 3;
     Serial.println("Change to STATISTIC mode");
     ocultarNivel();
-    game_mode();
+    estadisticas_mode();
   }
 
   if(digitalRead(BTN_DER) == LOW && last_btn_right_state == HIGH){
@@ -237,8 +237,12 @@ void move_right_1(){
   
 }
 
-void game_mode()
-{
+void game_mode(){
+
+}
+
+void estadisticas_mode(){
+
 }
 
 void configuration_mode() {
