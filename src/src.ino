@@ -62,6 +62,9 @@ void loop() {
   else if(estado_global == 1){
     Serial.println("Estoy en el menu");
       menu_mode();
+  } else if(estado_global == 2){
+    Serial.println("Estoy en el Juego GG");
+      game_mode();
   }
 
 }

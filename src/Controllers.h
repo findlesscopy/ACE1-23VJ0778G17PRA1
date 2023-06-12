@@ -40,5 +40,6 @@ void game_mode(/*DualMatrixController *screen*/);
 void configuration_mode(/*DualMatrixController *screen*/);
 void menu_mode();
 void initiate_buttons();
+void estadisticas_mode();
 
 #endif
